@@ -6,11 +6,13 @@ class Player:
         self.hand = hand
     
     def hit(self, card):
-        print('Player chose hit')
         self.hand.append(card)
 
-    def stay(self):
-        print('Player chose stay') 
+    def update_bankroll(self, action, amount):
+        if action == 'add':
+            self.bankroll += amount
+        if action == 'subtract':
+            self.bankroll -= amount
 
     def print_hand(self, hand):
         print('===============PLAYER=================')
