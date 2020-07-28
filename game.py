@@ -5,14 +5,30 @@ import helper
 
 def start_game():
     play_game = input('Would you like to play a game of Blackjack? ')
+    play_again = ''
     deck = Deck()
     deck.shuffle_deck()
     player_intial_hand = [deck.deal_one_card(), deck.deal_one_card()]
     dealer_intial_hand = [deck.deal_one_card(), deck.deal_one_card()]
     player = Player(100, player_intial_hand)
     dealer = Dealer(dealer_intial_hand)
+    dealer.hide_one_card()
 
     while play_game == 'yes':
+        if play_again == 'yes':
+            deck.shuffle_deck()
+            player_intial_hand = [
+                deck.deal_one_card(), deck.deal_one_card()]
+            dealer_intial_hand = [
+                deck.deal_one_card(), deck.deal_one_card()]
+            player = Player(player.bankroll, player_intial_hand)
+            dealer = Dealer(dealer_intial_hand)
+            dealer.hide_one_card()
+            play_again = 'no'
+        elif play_again == 'no':
+            play_game = 'no'
+            break
+           
         chips = int(input('How many chips do you want to bet: '))
         while chips > player.bankroll:
             print(f"You don't have sufficient funds! Your balance {player.bankroll}")
@@ -28,15 +44,16 @@ def start_game():
             dealer.print_hand(dealer.hand)
             player_sum = helper.sum_hand(player.hand)
             if player_sum > 21:
+                dealer.reveal_hidden_card()
+                dealer.print_hand(dealer.hand)
                 print('Game Over! Dealer Won!!!')
                 player.update_bankroll('subtract', chips)
-                play_game = input('Would you like to play again? ')
+                play_again = input('Would you like to play again? ')
                 break
-            else:
-                player_option = input('Hit or Stay: ')
-                break
+            
+            player_option = input('Hit or Stay: ')
         
-        while player_option == 'stay':
+        while player_option != 'hit':
             player_sum = helper.sum_hand(player.hand)
             dealer_sum = helper.sum_hand(dealer.hand)
             while dealer_sum <= 17:
@@ -45,22 +62,19 @@ def start_game():
                 player.print_hand(player.hand)
                 dealer.print_hand(dealer.hand)
                 dealer_sum = helper.sum_hand(dealer.hand)
-                if player_sum > dealer_sum or dealer_sum > 21:
-                    print('Game Over!! Player Won!!')
-                    chips *= 2
-                    player.update_bankroll('add', chips)
-                else:
-                    print('Game Over! Dealer Won!!!')
-                    player.update_bankroll('subtract', chips)
-
-            play_game = input('Would you like to play again? ')
-            if play_game == 'yes':
-                deck.shuffle_deck()
-                player_intial_hand = [deck.deal_one_card(), deck.deal_one_card()]
-                dealer_intial_hand = [deck.deal_one_card(), deck.deal_one_card()]
-                player = Player(player.bankroll, player_intial_hand)
-                dealer = Dealer(dealer_intial_hand)
-            break
+            if player_sum > dealer_sum or dealer_sum > 21:
+                print('Game Over!! Player Won!!')
+                chips *= 2
+                player.update_bankroll('add', chips)
+                play_again = input('Would you like to play again? ')
+                break
+            else:
+                dealer.reveal_hidden_card()
+                dealer.print_hand(dealer.hand)
+                print('Game Over! Dealer Won!!!')
+                player.update_bankroll('subtract', chips)
+                play_again = input('Would you like to play again? ')
+                break
 
 if __name__ == '__main__':
     start_game()

@@ -12,7 +12,7 @@ class Dealer:
         helper.print_hand(hand)
     
     def hide_one_card(self):
-        self.hand = hand[0].hidden = True
+        self.hand[0].hidden = True
     
     def reveal_hidden_card(self):
-        self.hand = hand[0].hidden = False
+        self.hand[0].hidden = False
