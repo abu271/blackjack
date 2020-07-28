@@ -20,6 +20,7 @@ class Card:
         self.suit = suit
         self.rank = rank
         self.value = Card.values[rank]
+        self.hidden = False
 
     def __str__(self):
         return f"{self.rank.capitalize()} of {self.suit.capitalize()}"
