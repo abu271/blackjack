@@ -4,9 +4,10 @@ from deck import Deck
 import helper
 
 def start_game():
+    helper.print_ascii_art()
     play_game = input('Would you like to play a game of Blackjack? ')
     play_again = ''
-    
+
     while play_game == 'yes':
         deck = Deck()
         deck.shuffle_deck()
