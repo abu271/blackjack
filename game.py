@@ -6,28 +6,23 @@ import helper
 def start_game():
     play_game = input('Would you like to play a game of Blackjack? ')
     play_again = ''
-    deck = Deck()
-    deck.shuffle_deck()
-    player_intial_hand = [deck.deal_one_card(), deck.deal_one_card()]
-    dealer_intial_hand = [deck.deal_one_card(), deck.deal_one_card()]
-    player = Player(100, player_intial_hand)
-    dealer = Dealer(dealer_intial_hand)
-    dealer.hide_one_card()
-
+    
     while play_game == 'yes':
+        deck = Deck()
+        deck.shuffle_deck()
+        player_intial_hand = [deck.deal_one_card(), deck.deal_one_card()]
+        dealer_intial_hand = [deck.deal_one_card(), deck.deal_one_card()]
+        dealer = Dealer(dealer_intial_hand)
+        dealer.hide_one_card()
+
         if play_again == 'yes':
-            deck.shuffle_deck()
-            player_intial_hand = [
-                deck.deal_one_card(), deck.deal_one_card()]
-            dealer_intial_hand = [
-                deck.deal_one_card(), deck.deal_one_card()]
             player = Player(player.bankroll, player_intial_hand)
-            dealer = Dealer(dealer_intial_hand)
-            dealer.hide_one_card()
             play_again = 'no'
         elif play_again == 'no':
             play_game = 'no'
             break
+        else:
+            player = Player(100, player_intial_hand)
            
         chips = int(input('How many chips do you want to bet: '))
         while chips > player.bankroll:
@@ -50,7 +45,6 @@ def start_game():
                 player.update_bankroll('subtract', chips)
                 play_again = input('Would you like to play again? ')
                 break
-            
             player_option = input('Hit or Stay: ')
         
         while player_option != 'hit':
